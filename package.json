@@ -1,0 +1,9 @@
+{
+  "name": "generator-beibei-library",
+  "version": "0.0.1",
+  "description": "a generator which can build beibei library",
+  "main": "index.js",
+  "author": "LYZ",
+  "license": "MIT",
+  "keywords": ["yeoman-generator"]
+}
