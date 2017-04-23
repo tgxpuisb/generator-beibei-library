@@ -5,5 +5,13 @@
   "main": "index.js",
   "author": "LYZ",
   "license": "MIT",
-  "keywords": ["yeoman-generator"]
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^1.1.1"
+  },
+  "files": [
+    "generators"
+  ]
 }
