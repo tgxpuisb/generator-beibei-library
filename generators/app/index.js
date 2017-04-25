@@ -58,23 +58,106 @@ module.exports = class Main extends generators {
 				type: 'list',
 				name: 'manager',
 				message: '安装方式',
-				choices: ['npm', 'cnpm', 'yarn']
+				choices: ['npm', 'cnpm', 'yarn'],
 				when: answers => {
 					return answers.installDependencies
 				}
 			}
 		]
+		this.answers = null
 	}
 
 	prompting () {
 		this
 			.prompt(this.QUESTIONS)
 			.then(answers => {
-				this.log(answers)
+				this.answers = answers
+				this.log(this.answers)
 			})
 	}
 
 	writing () {
+		if (this.answers.builder === 'rollup') {
+			this._genRollupProject()
+		} else if (this.answers.builder === 'webpack') {
+			this._genWebpackProject()
+		}
+
+		this.fs.copyTpl(
+			this.templatePath('src/index.js'),
+			this.destinationPath('src/' + this.appname + '.js')
+			{
+				appname: this.appname
+			}
+		)
+
+		this.fs.copy(
+			this.templatePath('gitignore'),
+			this.destinationPath('.gitignore')
+		)
+
+		this.fs.copy(
+			this.templatePath('README.md'),
+			this.destinationPath('README.md')
+		)
+
+		this.fs.copy(
+			this.templatePath('eslintrc'),
+			this.destinationPath('.eslintrc')
+		)
+	}
+
+	_genWebpackProject () {
+
+		this.fs.copyTpl(
+			this.templatePath('_package.webpack.json'),
+			this.destinationPath('package.json'),
+			{
+				appname: this.appname,
+				name: this.user.git.name(),
+				email: this.user.git.email()
+			}
+		)
+
+		this.fs.copyTpl(
+			this.templatePath('webpack_build/webpack.config.js'),
+			this.destinationPath('webpack.config.js'),
+			{
+				appname: this.appname
+			}
+		)
+
+		this.fs.copy(
+			this.templatePath('webpack_babelrc')
+			this.destinationPath('.babelrc')
+		)
+
+	}
+
+	_genRollupProject () {
+
+		this.fs.copyTpl(
+			this.templatePath('_package.rollup.json'),
+			this.destinationPath('package.json'),
+			{
+				appname: this.appname,
+				name: this.user.git.name(),
+				email: this.user.git.email()
+			}
+		)
+
+		this.fs.copyTpl(
+			this.templatePath('rollup_build/config.js'),
+			this.destinationPath('rollup.config.js'),
+			{
+				appname: this.appname
+			}
+		)
+
+		this.fs.copy(
+			this.templatePath('rollup_babelrc')
+			this.destinationPath('.babelrc')
+		)
 
 	}
 
