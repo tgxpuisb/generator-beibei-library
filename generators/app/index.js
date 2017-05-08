@@ -73,10 +73,11 @@ module.exports = class Main extends generators {
 			.then(answers => {
 				this.answers = answers
 				this.log(this.answers)
+				this._writing()
 			})
 	}
 
-	writing () {
+	_writing () {
 		if (this.answers.builder === 'rollup') {
 			this._genRollupProject()
 		} else if (this.answers.builder === 'webpack') {
@@ -85,7 +86,7 @@ module.exports = class Main extends generators {
 
 		this.fs.copyTpl(
 			this.templatePath('src/index.js'),
-			this.destinationPath('src/' + this.appname + '.js')
+			this.destinationPath('src/' + this.appname + '.js'),
 			{
 				appname: this.appname
 			}
@@ -128,7 +129,7 @@ module.exports = class Main extends generators {
 		)
 
 		this.fs.copy(
-			this.templatePath('webpack_babelrc')
+			this.templatePath('webpack_babelrc'),
 			this.destinationPath('.babelrc')
 		)
 
@@ -147,6 +148,7 @@ module.exports = class Main extends generators {
 		)
 
 		this.fs.copyTpl(
+
 			this.templatePath('rollup_build/config.js'),
 			this.destinationPath('rollup.config.js'),
 			{
@@ -155,7 +157,7 @@ module.exports = class Main extends generators {
 		)
 
 		this.fs.copy(
-			this.templatePath('rollup_babelrc')
+			this.templatePath('rollup_babelrc'),
 			this.destinationPath('.babelrc')
 		)
 
